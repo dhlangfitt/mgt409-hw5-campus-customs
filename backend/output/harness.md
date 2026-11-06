@@ -23,6 +23,7 @@ Service**.
 | 2026-11-06 | 7 — Build the Backend API Routes | Added section 14: the FastAPI routes, update strategy, approval lifecycle, locking and reset. The MCP server gained `get_cash_position`, `list_pending_approvals(include_decided)`, a `failed` payment-request state and reset-safe schema creation. Accounting gained `prepare_purchase_request` (notes in 9.3 and 10.3). |
 | 2026-11-06 | 8 — Build the React Agent Dashboard | Added section 15: the dashboard in `frontend/` (design rationale in `design.md`). The audit trail's string limit went from 240 to 600 characters (section 11 note). |
 | 2026-11-06 | 9 — Run the Agents and Resolve the Three Tickets | Added section 16, the finished system as it stands now (where earlier sections differ, 16 is current), and section 17, the full run and its results. New: the `add_human_note` tool, `POST /api/tickets/{id}/notes`, the dashboard notes box, run history rebuilt from the audit trail on startup, the full Boss outcome logged in `run_finished`, and a fix for the stuck "Working" state. |
+| 2026-11-06 | 11 — Publish the Project to GitHub | Added section 18: the root README, a tighter `.gitignore`, the secrets scan, the clean-checkout test and the public repository. |
 
 ---
 
@@ -1409,3 +1410,42 @@ All generated from the audit trail and the database, not typed by hand:
 - `resolved_tickets.json`: the structured record.
 - `resolved_board.html`: six real screenshots of the React dashboard taken from
   the browser pane after the runs, embedded in the page.
+
+## 18. Publishing (Problem 11, 2026-11-06)
+
+- **Repository:** https://github.com/dhlangfitt/mgt409-hw5-campus-customs (public,
+  branch `main`). The URL is also in `github_url.txt` and
+  `backend/output/github_url.txt`.
+- **Layout.** Every file from the Problem 1 layout is present. `README.md` and
+  `github_url.txt` were added in this problem.
+- **Not published** (`.gitignore`):
+  - `.env` and every other `.env.*` file except `.env.example`;
+  - `.venv/`, `node_modules/` and `frontend/dist/`;
+  - `__pycache__/`;
+  - SQLite journal files and the temporary reset file;
+  - `.DS_Store`, editor folders and `.claude/`.
+- **Secrets scan before the push:**
+  - The real Portkey key appeared in no file, neither database and not the audit
+    trail.
+  - No `sk-`, `gho_`, `ghp_` or Bearer token patterns, and no machine-specific paths.
+- **Databases.** The original's SHA-1 is unchanged (`f447ca6a…`), and both
+  databases pass `integrity_check`. The working copy is the final state of the
+  Problem 9 run: 101 resolved, 102 awaiting approval, 103 resolved, checking
+  $3,400.00.
+- **Clean-checkout test.** The local repository was cloned into a scratch folder
+  and the README followed step by step:
+  - **Install:** `pip install` and `npm install`.
+  - **Backend:** started with `uvicorn main:app --reload --port 8000` from
+    `backend/`; health `ok`, MCP connected.
+  - **Data:** tickets and cash read correctly.
+  - **Dashboard:** CORS allowed from :5173; `npm run dev` served it.
+  - **Reset:** method B worked.
+  - **MCP:** standalone via `mcp.json`, 13 tools, no payment execution.
+
+  No agent run was made in the test. The key came from the shell environment,
+  which the README covers as an alternative to `.env`.
+- **Verified after the push, without logging in:**
+  - The repository page and the raw README both returned HTTP 200, and GitHub
+    reports it as `PUBLIC`.
+  - An anonymous `git clone` received the same commit and every file, with both
+    databases byte-identical to the local copies.

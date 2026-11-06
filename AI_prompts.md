@@ -30,7 +30,7 @@ Secrets are never recorded in this log, even if shared accidentally.
 | 8 | Build the React Agent Dashboard | Complete |
 | 9 | Run the Agents and Resolve the Three Tickets | Complete (102 left awaiting approval by the user) |
 | 10 | Reflect on the Results | Complete |
-| 11 | Publish the Project to GitHub | In progress |
+| 11 | Publish the Project to GitHub | Complete |
 
 *The total number of Problems is not yet known. This table grows as the user
 announces each one.*
@@ -1359,3 +1359,54 @@ text attached.
 
 > Problem 11: Publish the Project to GitHub
 > Okay, we're nearly done. I need to get this project into a public GitHub repository so that someone else can clone it and run it. Before pushing anything, please do a proper check of the repository and make sure the file structure matches the expected layout we established back in Problem 1. Check that all the required source files, documentation, database files and output artefacts are present, and flag anything that's missing or in the wrong place. Please also check that the README is actually useful to someone who hasn't worked on this project with us. It should explain what Campus Customs is, what the different components do, which environment variables are required, how to install the dependencies, how to start the MCP server, how to start the FastAPI backend, how to start the React dashboard, and how to reset the working database from the original copy before a full three-ticket run. Make sure the instructions work from a clean checkout rather than relying on anything installed or configured only on my machine. Check .gitignorecarefully and make sure the real .env file, API keys, local virtual environments, build artefacts and other secrets or machine-specific files won't be published. Do include .env.example with the names of the required environment variables and sensible placeholders, but no actual credentials. Both data/campus_customs.db and data/campus_customs_new.db should be included in the repository so the graders can reproduce the project, but make sure the working copy reflects the intended final state and the original remains untouched. Once everything looks right, help me create a public GitHub repository and push the project. If you need me to log in, authorise GitHub or confirm the repository name, stop and ask me rather than trying to work around the permissions. Don't claim the project has been published until you've verified that the push succeeded and the repository is actually accessible. Finally, save the public repository URL in github_url.txt at the project root and in backend/output/github_url.txt if we're keeping the output copy as well, and show me the final URL. I want to be able to hand this over to someone else and have them understand how to run it without needing our conversation history.
+
+### Assistant — clarifying questions — 2026-11-06
+
+Before creating anything public, the assistant made these checks:
+
+- **Layout:** everything was present except `README.md` and `github_url.txt`.
+- **Secrets scan:** clean.
+- **Original database:** untouched.
+- **Clean-clone test:** the README steps worked.
+
+It then asked:
+
+> I'll create a PUBLIC repository on your GitHub account (dhlangfitt, already logged in with gh) and push the hw5 project: 57 files in one commit, with no .env, keys, .venv or node_modules. Which repository name should I use? Both names below are free.
+>
+> - campus-customs-multi-agent
+> - mgt409-hw5-campus-customs
+> - Don't publish yet
+>
+> The layout from Problem 1 has github_url.txt only at the project root. Should I also save a copy in backend/output/github_url.txt?
+>
+> - Root only
+> - Root and backend/output
+
+### User — 2026-11-06 (answers)
+
+> mgt409-hw5-campus-customs
+>
+> Root and backend/output
+
+### Why this follow-up was needed
+
+The brief said to stop and ask before confirming the repository name. Creating a
+public repository is also an outward-facing action that needs the user's go-ahead.
+The second question settled whether to keep the optional output copy of the URL.
+
+### Assistant — 2026-11-06
+
+> **The project is published: https://github.com/dhlangfitt/mgt409-hw5-campus-customs**
+>
+> **Before pushing:**
+>
+> - **Layout:** matches Problem 1. I added the missing root `README.md`, and `github_url.txt` is now at the root and in `backend/output/`.
+> - **README:** written for someone new. It covers what Campus Customs is, the three components and how they connect, the required environment variables (table), installation, how to start the backend (which starts the MCP server itself), the dashboard and the MCP server on its own, how to reset the working copy (two ways) before a three-ticket run, how to run the tickets, a repository map, and troubleshooting, including Windows.
+> - **`.gitignore`:** tightened. `.env` files, `.venv`, `node_modules`, build output, caches, SQLite side files, `.DS_Store` and editor folders are excluded. `.env.example` (root and `frontend/`) is included, with variable names only.
+> - **Secrets scan:** the real Portkey key is in no file, neither database and not the audit trail. No token patterns, and no machine-specific paths.
+> - **Databases:** both are included. The original is untouched (`f447ca6a…`). The working copy is the final state of the Problem 9 run (101 resolved, 102 awaiting approval, 103 resolved, $3,400.00).
+> - **Clean-checkout test:** I cloned the repository into a scratch folder and followed the README exactly. pip and npm installed; the backend started from `backend/` with `uvicorn main:app --reload --port 8000` and connected to MCP; the dashboard served on 5173 with CORS allowed; the reset worked; the MCP server ran on its own through `mcp.json`.
+>
+> **After pushing, checked without logging in:** the repository page and the raw README return HTTP 200, GitHub reports it as **PUBLIC**, and an anonymous clone received the same commit with both databases byte-identical.
+>
+> Two commits are on `main`: the project, then this one (the URL files, harness section 18 and the finished log).
