@@ -1,0 +1,31 @@
+# Secrets: real keys live only in .env files, which are never committed.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node / React
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# SQLite side files and the temporary file used during a database reset
+*.db-journal
+*.db-wal
+*.db-shm
+data/.reset-*
+
+# Logs, editors, OS
+*.log
+.vscode/
+.idea/
+.claude/
+.DS_Store

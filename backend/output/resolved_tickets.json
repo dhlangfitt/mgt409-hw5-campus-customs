@@ -1,0 +1,364 @@
+{
+  "generated_at": "2026-11-06T19:46:04+00:00",
+  "source": "backend/output/audit_trail.json (run events) and data/campus_customs_new.db (read-only), after the Problem 9 run",
+  "model": "gpt-6-luna via Portkey",
+  "summary": {
+    "resolved": [
+      101,
+      103
+    ],
+    "not_resolved": {
+      "102": "awaiting_approval"
+    }
+  },
+  "cash": {
+    "account": "checking",
+    "starting_balance_after_reset": 3400.0,
+    "payments_executed": [],
+    "total_paid": 0,
+    "ending_balance_cash_accounts": 3400.0,
+    "reconciles": true
+  },
+  "tickets": [
+    {
+      "ticket_id": 101,
+      "type": "customer_order",
+      "requester": "Tauhid Zaman",
+      "subject": "Bulldog tee",
+      "final_status": "resolved",
+      "resolved": true,
+      "short_outcome": "Size S is out of stock. Accounting found Bulldog Print Co on shipping hold because invoice 501 ($840, due 2026-08-28) is overdue, so there is no reliable restock date; the SKU-to-vendor link is also unconfirmed. No purchase request was prepared. Customer Service saved draft 1 for Tauhid Zaman explaining the situation and offering available sizes M, L, or XL. The draft has not been sent.",
+      "agents_involved": [
+        "boss",
+        "accounting",
+        "customer_service"
+      ],
+      "delegations": [
+        {
+          "from": "boss",
+          "to": "accounting",
+          "request": "For ticket 101, customer order for one Classic Bulldog Tee (SKU CC-TEE-WHITE), size S, with zero on hand, determine whether Bulldog Print Co can restock given the open $840 invoice 501 overdue since 2026-08-28; report vendor hold status, lead time/arrival estimate, and whether preparing a purchase request is possible/appropriate. Also report relevant stock/availability facts."
+        },
+        {
+          "from": "boss",
+          "to": "customer_service",
+          "request": "For ticket 101, draft a reply to Tauhid Zaman about the requested Classic Bulldog Tee, size S, qty 1. Facts: currently zero in stock; Bulldog Print Co has shipping hold from overdue $840 invoice 501 (due 2026-08-28); 5-day lead time applies only after hold clears, so no reliable arrival date. No purchase request has been prepared and vendor-to-SKU link is unconfirmed. Please explain that availability is uncertain and ask whether the customer would like to wait for an update or consider another size (M/L/XL currently have 5/3/2 on hand). Do not promise timing or send."
+        }
+      ],
+      "agent_contributions": [
+        {
+          "agent": "boss",
+          "tools_used": [
+            "get_ticket_details",
+            "update_ticket_status",
+            "get_ticket_details",
+            "update_ticket_status"
+          ],
+          "delegated_to": [
+            "accounting",
+            "customer_service"
+          ],
+          "contribution": "Size S is out of stock. Accounting found Bulldog Print Co on shipping hold because invoice 501 ($840, due 2026-08-28) is overdue, so there is no reliable restock date; the SKU-to-vendor link is also unconfirmed. No purchase request was prepared. Customer Service saved draft 1 for Tauhid Zaman explaining the situation and offering available sizes M, L, or XL. The draft has not been sent.",
+          "report_status": "resolved"
+        },
+        {
+          "agent": "accounting",
+          "tools_used": [
+            "get_stock_and_price_quote",
+            "get_invoice_and_vendor_status",
+            "get_ticket_details"
+          ],
+          "delegated_to": [],
+          "contribution": "Bulldog Print Co is on shipping hold: its open $840 invoice 501 is 3 days overdue as of shop today (2026-08-31), and the hold prevents it shipping new products. Its lead time is 5 days, so 2026-09-05 is only the earliest possible arrival if the hold is cleared and it ships today; while the hold remains, there is no reachable arrival estimate. Size S has zero on hand (shortfall 1); sizes M/L/XL have 5/3/2 units respectively. A purchase request could be recorded as a proposal, but it would not order anything and the vendor cannot ship while invoice 501 remains unpaid; preparing one is therefore \u2026 (779 chars)",
+          "report_status": "done"
+        },
+        {
+          "agent": "customer_service",
+          "tools_used": [
+            "get_ticket_details",
+            "get_stock_and_price_quote",
+            "save_draft_message"
+          ],
+          "delegated_to": [],
+          "contribution": "Saved a customer reply draft for Tauhid Zaman explaining size S is out of stock, restock availability is uncertain with no reliable arrival date, and asking whether they\u2019d prefer to wait for an update or consider an available size.",
+          "report_status": "done"
+        }
+      ],
+      "records_created": {
+        "payment_requests": [],
+        "purchase_requests": [],
+        "message_drafts": [
+          {
+            "id": 1,
+            "to": "Tauhid Zaman",
+            "subject": "Update on your Classic Bulldog Tee request",
+            "sent": false
+          }
+        ]
+      },
+      "human_approvals": [],
+      "human_notes": [],
+      "cash_change": 0.0,
+      "runs": [
+        {
+          "run_id": "run-20261106T193433Z-7c7610",
+          "started": "2026-11-06T19:34:33.111+00:00",
+          "finished": "2026-11-06T19:35:07.705+00:00",
+          "boss_final_status": "resolved",
+          "model_requests": 13,
+          "input_tokens": 37804,
+          "output_tokens": 1649
+        }
+      ],
+      "comparison_with_expected": [
+        {
+          "kind": "same",
+          "note": "Lean routing as predicted: Boss \u2192 Accounting, then Boss \u2192 Customer Service (2 hand-offs); Inventory and Facilities not involved."
+        },
+        {
+          "kind": "same",
+          "note": "Accounting used get_invoice_and_vendor_status and found Bulldog Print Co on hold (invoice 501, 3 days overdue); Customer Service gave no firm date and didn't mention invoices or cash."
+        },
+        {
+          "kind": "diff",
+          "note": "No payment request for invoice 501. Expected Accounting to prepare one so the reprint could ship; instead the Boss decided not to pursue the restock (vendor on hold and the tee-to-vendor link is not in the database)."
+        },
+        {
+          "kind": "diff",
+          "note": "Status 'resolved' instead of 'awaiting_approval': the Boss closed the ticket once the customer draft offering M/L/XL was saved."
+        },
+        {
+          "kind": "diff",
+          "note": "Extra tool calls not predicted: Accounting and Customer Service each re-read the ticket (get_ticket_details); Boss read it twice and updated status twice."
+        }
+      ]
+    },
+    {
+      "ticket_id": 102,
+      "type": "rent_notice",
+      "requester": "Elm City Properties",
+      "subject": "Rent due",
+      "final_status": "awaiting_approval",
+      "resolved": false,
+      "short_outcome": "The $2,400 rent for the Chapel Street shop is due September 2, 2026. Accounting confirmed the payment fits the $3,400 checking balance; after rent and the other recorded $840 overdue invoice, $160 would remain. Payment request 1 is pending human approval. No payment has been made.",
+      "agents_involved": [
+        "boss",
+        "accounting"
+      ],
+      "delegations": [
+        {
+          "from": "boss",
+          "to": "accounting",
+          "request": "For ticket 102, rent notice for lease 1 (Chapel Street shop), rent $2,400 due 2026-09-02, please confirm current cash/checking balance, whether a $2,400 rent payment fits without taking checking below zero, and prepare a payment request if eligible. No payment should be made; report the request ID or blocker."
+        }
+      ],
+      "agent_contributions": [
+        {
+          "agent": "boss",
+          "tools_used": [
+            "get_ticket_details",
+            "update_ticket_status"
+          ],
+          "delegated_to": [
+            "accounting"
+          ],
+          "contribution": "The $2,400 rent for the Chapel Street shop is due September 2, 2026. Accounting confirmed the payment fits the $3,400 checking balance; after rent and the other recorded $840 overdue invoice, $160 would remain. Payment request 1 is pending human approval. No payment has been made.",
+          "report_status": "awaiting_approval"
+        },
+        {
+          "agent": "accounting",
+          "tools_used": [
+            "get_rent_payment_status",
+            "list_pending_approvals",
+            "prepare_payment_request"
+          ],
+          "delegated_to": [],
+          "contribution": "Checking balance is $3,400, and the $2,400 Chapel Street rent due 2026-09-02 is not overdue and fits, leaving $1,000 after rent. Payment request 1 is waiting for human approval; after rent and all other bills on record, checking would have $160 remaining. No payment has been made.",
+          "report_status": "needs_human_approval"
+        }
+      ],
+      "records_created": {
+        "payment_requests": [
+          {
+            "id": 1,
+            "amount": 2400.0,
+            "status": "pending_approval"
+          }
+        ],
+        "purchase_requests": [],
+        "message_drafts": []
+      },
+      "human_approvals": [
+        {
+          "kind": "payment",
+          "request_id": 1,
+          "amount": 2400.0,
+          "payee": "Elm City Properties",
+          "status_in_database": "pending_approval",
+          "human_decision": "Left pending by the user (chose 'Leave it pending' when asked on 2026-11-06); not approved, not rejected, no money moved."
+        }
+      ],
+      "human_notes": [],
+      "cash_change": 0.0,
+      "runs": [
+        {
+          "run_id": "run-20261106T193544Z-727263",
+          "started": "2026-11-06T19:35:44.864+00:00",
+          "finished": "2026-11-06T19:35:48.650+00:00",
+          "boss_final_status": "awaiting_approval",
+          "model_requests": 8,
+          "input_tokens": 22997,
+          "output_tokens": 728
+        }
+      ],
+      "comparison_with_expected": [
+        {
+          "kind": "same",
+          "note": "Exactly the predicted path: Boss \u2192 Accounting only (1 hand-off); Facilities, Inventory and Customer Service not involved."
+        },
+        {
+          "kind": "same",
+          "note": "Exactly the predicted tools: get_rent_payment_status, list_pending_approvals, prepare_payment_request; payment request 1 for $2,400.00 created, $160 remaining-after-all-bills flagged."
+        },
+        {
+          "kind": "same",
+          "note": "Ended 'awaiting_approval' as predicted; no landlord draft."
+        },
+        {
+          "kind": "diff",
+          "note": "Not resolved: the human decided to leave payment request 1 pending, so the ticket stays awaiting approval and no money moved."
+        },
+        {
+          "kind": "note",
+          "note": "This run finished in ~4 s with token usage identical to the Problem 8 demo run on the same ticket \u2014 most likely Portkey returned cached model responses for an identical prompt. The MCP tool calls were executed for real (payment request 1 exists in the database)."
+        }
+      ]
+    },
+    {
+      "ticket_id": 103,
+      "type": "price_override",
+      "requester": "Yale AI Club",
+      "subject": "Bulk hoodie discount",
+      "final_status": "resolved",
+      "resolved": true,
+      "short_outcome": "Approved a 10% bulk discount: $52.20 per hoodie, or $1,044 for 20. This price is above the $22 unit cost, yielding $30.20 gross margin per unit. Only 8 size M hoodies are on hand; a restock of 12 cannot be confirmed because the inferred vendor is on hold for unpaid invoice 501 and vendor linkage is unconfirmed. Customer Service drafted a reply explaining the shortfall and asking whether the club wants the 8 available or prefers to wait. The draft has not been sent.",
+      "agents_involved": [
+        "boss",
+        "accounting",
+        "customer_service"
+      ],
+      "delegations": [
+        {
+          "from": "boss",
+          "to": "accounting",
+          "request": "For ticket 103, Yale AI Club wants 20 CC-HOOD-NAVY size M hoodies and on-hand stock is 8. Verify current list price, cost/break-even floor and resulting gross margin at a reasonable discount; identify whether the vendor can restock the missing 12 and expected timing given any invoice hold. If feasible, prepare a purchase request for the 12 units. Do not prepare a payment request."
+        },
+        {
+          "from": "boss",
+          "to": "customer_service",
+          "request": "Ticket 103: Draft (do not send) a reply to Yale AI Club. Offer 20 CC-HOOD-NAVY size M hoodies at the Boss-approved 10% bulk discount: $52.20 each, $1,044 total. Be transparent that only 8 are on hand; the other 12 are not currently available for confirmed restock because the inferred vendor is on shipping hold for unpaid invoice 501 and vendor linkage is unconfirmed. Do not promise delivery dates; ask whether they want the available 8 or to wait pending restock resolution."
+        }
+      ],
+      "agent_contributions": [
+        {
+          "agent": "boss",
+          "tools_used": [
+            "get_ticket_details",
+            "update_ticket_status"
+          ],
+          "delegated_to": [
+            "accounting",
+            "customer_service"
+          ],
+          "contribution": "Approved a 10% bulk discount: $52.20 per hoodie, or $1,044 for 20. This price is above the $22 unit cost, yielding $30.20 gross margin per unit. Only 8 size M hoodies are on hand; a restock of 12 cannot be confirmed because the inferred vendor is on hold for unpaid invoice 501 and vendor linkage is unconfirmed. Customer Service drafted a reply explaining the shortfall and asking whether the club wants the 8 available or prefers to wait. The draft has not been sent.",
+          "report_status": "resolved"
+        },
+        {
+          "agent": "accounting",
+          "tools_used": [
+            "list_vendors_with_status",
+            "get_stock_and_price_quote",
+            "get_ticket_details"
+          ],
+          "delegated_to": [],
+          "contribution": "For 20 CC-HOOD-NAVY M hoodies, list price is $58 and unit cost/break-even is $22. At a reasonable 10% discount ($52.20 each), gross margin is $30.20 per hoodie / $604 total on the full order, above cost. There are 8 on hand, leaving 12 short; Bulldog Print Co is the inferred apparel vendor, but it is blocked by unpaid invoice 501, so the nominal five-day arrival date of 2026-09-05 is not achievable unless the hold clears. I did not prepare a purchase request because the likely supplier cannot currently ship and supplier linkage is not confirmed.",
+          "report_status": "needs_boss_decision"
+        },
+        {
+          "agent": "customer_service",
+          "tools_used": [
+            "get_ticket_details",
+            "get_stock_and_price_quote",
+            "save_draft_message"
+          ],
+          "delegated_to": [],
+          "contribution": "Saved draft reply 2 for Yale AI Club. It offers 20 size M hoodies at $52.20 each ($1,044 total), explains that only 8 are currently available and the remaining 12 have no confirmed restock or delivery date, and asks whether they prefer the 8 available or to wait pending restock resolution.",
+          "report_status": "done"
+        }
+      ],
+      "records_created": {
+        "payment_requests": [],
+        "purchase_requests": [],
+        "message_drafts": [
+          {
+            "id": 2,
+            "to": "Yale AI Club",
+            "subject": "Your bulk hoodie request",
+            "sent": false
+          }
+        ]
+      },
+      "human_approvals": [],
+      "human_notes": [
+        {
+          "author": "human:Dan Langfitt",
+          "note": "Manager decision: I have no preference on the discount level. Boss, make the call yourself (stay above cost), decide how to handle the 12-unit shortfall, and have Customer Service draft the reply to the Yale AI Club.",
+          "at": "2026-11-06T19:41:59+00:00"
+        }
+      ],
+      "cash_change": 0.0,
+      "runs": [
+        {
+          "run_id": "run-20261106T193606Z-847db7",
+          "started": "2026-11-06T19:36:06.112+00:00",
+          "finished": "2026-11-06T19:36:25.102+00:00",
+          "boss_final_status": "needs_human_input",
+          "model_requests": 6,
+          "input_tokens": 16904,
+          "output_tokens": 1109
+        },
+        {
+          "run_id": "run-20261106T194212Z-e9b5ae",
+          "started": "2026-11-06T19:42:12.756+00:00",
+          "finished": "2026-11-06T19:42:45.005+00:00",
+          "boss_final_status": "resolved",
+          "model_requests": 11,
+          "input_tokens": 31401,
+          "output_tokens": 1515
+        }
+      ],
+      "comparison_with_expected": [
+        {
+          "kind": "diff",
+          "note": "First run: Boss \u2192 Accounting, then the Boss did not decide the discount and returned 'needs_human_input' \u2014 the prompt says the discount is the Boss's call, so this was a deviation."
+        },
+        {
+          "kind": "note",
+          "note": "A human-note feature was added in response; the manager's note said they had no preference and the Boss should decide."
+        },
+        {
+          "kind": "same",
+          "note": "Second run followed the Expected lean path: Boss \u2192 Accounting (stock/price quote, vendors), Boss decided, Boss \u2192 Customer Service draft (2 hand-offs; Inventory and Facilities not involved)."
+        },
+        {
+          "kind": "same",
+          "note": "Discount was 'modest and well above cost' as predicted: 10% ($52.20 each, $1,044 for 20, $30.20 margin per unit). No purchase request, as predicted."
+        },
+        {
+          "kind": "diff",
+          "note": "Accounting did not call check_cash_for_amount for the $264 restock (predicted). Final status 'resolved' rather than the predicted 'in_progress'."
+        }
+      ]
+    }
+  ]
+}
